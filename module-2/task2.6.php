@@ -1,0 +1,44 @@
+<?php
+$b=false;
+$isLessonCompleted=true;
+$number1=3;
+$number2=4;
+$c=3+4;
+var_dump($c);
+$x=7.3;
+$result=$x+$number1;
+var_dump($result);
+$line1="cola";
+$line2="pepsi";
+$line3="schweppes";
+$line=[$line1,$line3,$line2];
+var_dump($line);
+$isGood=true;
+$smallNumber=1;
+$isGood= $isGood+$smallNumber;
+var_dump($isGood);
+$firstDay = 'Понедельник';
+$secondDay = 'Вторник';
+$Day = 'Среда';
+var_dump($firstDay . ' ' . $secondDay . ' ' . $Day);
+$catsCount=3;
+var_dump("Во дворе котов: $catsCount");
+$currentDate="2021.11.08";
+echo("Шла зима. Календарь неумолимо показывает 1971-12-31. Эх, скорей бы лето");
+echo('Шла зима. Календарь неумолимо показывает $currentDate. Эх, скорей бы лето');
+$name = 'Мурзик';
+$paws = 4;
+$ear = 2;
+$catlength = 27;
+$colorTorso = 'черного';
+$colorPaws1 = 'белого';
+$colorPaws2 = 'черного';
+$basin = 'тазик';
+$coloBasin = 'с мазутом';
+
+var_dump("Жил был кот по имени $name");
+var_dump("У него было $paws лапы, $ear уха и хвост длинной $catlength см");
+var_dump("Сам он был $colorTorso цвета, но лапки были $colorPaws1 цвета");
+var_dump("Однажды он пошел гулять и упал в $basin $coloBasin");
+var_dump("Теперь и лапы нашего кота тоже $colorPaws2 цвета");
+?>
