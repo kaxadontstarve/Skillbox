@@ -2,7 +2,7 @@
 
 class Text
 {
-
+    public $data;
     public $text;
     public $title;
     public $author;
@@ -10,11 +10,12 @@ class Text
     public $slug;
     public $storage;
     
-    public function __construct($author, $slug)
+    public function __construct($author, $slug, FileStorage $data)
     {
         $this->author = $author;
         $this->slug = $slug;
         $this->published = date("Y-m-d H:i:s");
+        $this->data = $data;
     }
 
     public function storeText()
@@ -30,16 +31,7 @@ class Text
 
     public function loadText()
     {
-        if (filesize($this->storage['slug'])) {
-            $this->storage = unserialize(file_get_contents($this->storage['slug'], 0));
-            $this->text = $this->storage['text'];
-            $this->title = $this->storage['title'];
-            $this->published = $this->storage['published'];
-            $this->slug = $this->storage['slug'];
-            $this->author = $this->storage['author'];
-            return $this->text;
-        }
-        return 'Файл пуст';
+        return $this->data->read('', $this->slug);
     }
 
     public function editText($title, $text)
@@ -49,7 +41,5 @@ class Text
     }
 }
 
-$textMessage = new Text('Kaxa', 'text.txt');
-$textMessage->editText('It is title', 'It is text');
-$textMessage->storeText();
-var_dump($textMessage->loadText());
+
+
