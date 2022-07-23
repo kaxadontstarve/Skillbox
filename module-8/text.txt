@@ -1,1 +1,0 @@
-a:5:{s:4:"text";s:10:"It is text";s:5:"title";s:11:"It is title";s:9:"published";s:19:"2022-07-23 13:50:00";s:4:"slug";s:8:"text.txt";s:6:"author";s:4:"Kaxa";}
