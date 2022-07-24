@@ -2,36 +2,37 @@
 
 class Text
 {
-    public $data;
+
     public $text;
     public $title;
     public $author;
     public $published;
     public $slug;
     public $storage;
-    
-    public function __construct($author, $slug, FileStorage $data)
+    public $fileStorage;
+
+    public function __construct($author, $slug, FileStorage $fileStorage)
     {
         $this->author = $author;
         $this->slug = $slug;
         $this->published = date("Y-m-d H:i:s");
-        $this->data = $data;
+        $this->fileStorage = $fileStorage;
     }
 
     public function storeText()
     {
-        $this->storage['text'] = $this->text;
-        $this->storage['title'] = $this->title;
-        $this->storage['published'] = $this->published;
-        $this->storage['slug'] = $this->slug;
-        $this->storage['author'] = $this->author;
+        $storage['text'] = $this->text;
+        $storage['title'] = $this->title;
+        $storage['published'] = $this->published;
+        $storage['slug'] = $this->slug;
+        $storage['author'] = $this->author;
 
-        file_put_contents($this->storage['slug'], serialize($this->storage));
+        file_put_contents($this->slug, serialize($storage));
     }
 
     public function loadText()
     {
-        return $this->data->read('', $this->slug);
+        return $this->fileStorage->read('', $this->slug);
     }
 
     public function editText($title, $text)
@@ -40,6 +41,3 @@ class Text
         $this->title = $title;
     }
 }
-
-
-
