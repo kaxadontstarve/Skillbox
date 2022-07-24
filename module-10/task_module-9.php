@@ -17,7 +17,6 @@ abstract class Storage implements LoggerInterface, EventListenerInterface
     public function logMessage($errorMessage)
     {
         error_log(serialize($errorMessage), 3, 'errors.txt');
-
     }
 
     public function lastMessages($countMessage)
@@ -27,12 +26,11 @@ abstract class Storage implements LoggerInterface, EventListenerInterface
 
     public function attachEvent($methodName, $callback)
     {
-    set_error_handler([$methodName, $callback]);
+        set_error_handler([$methodName, $callback]);
     }
 
     public function detouchEvent($methodName)
     {
-        
     }
 }
 
@@ -70,7 +68,6 @@ class FileStorage extends Storage
 {
     public $Text;
     public $slug;
-
 
     public function create(Text $Text)
     {

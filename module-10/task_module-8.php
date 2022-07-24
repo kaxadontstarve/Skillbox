@@ -1,6 +1,4 @@
 <?php
-
-
 class Text
 {
     public $data;
@@ -10,7 +8,7 @@ class Text
     public $published;
     public $slug;
     public $storage;
-    
+
     public function __construct($author, $slug, FileStorage $data)
     {
         $this->author = $author;
@@ -41,6 +39,3 @@ class Text
         $this->title = $title;
     }
 }
-
-
-
