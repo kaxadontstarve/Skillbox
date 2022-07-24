@@ -3,11 +3,11 @@ require "./task_module-8.php";
 
 abstract class Storage
 {
-    abstract function create(Text $data);
+    abstract function create(Text $Text);
 
     abstract function read($id, $slug);
 
-    abstract function update($id, $slug, Text $data);
+    abstract function update($id, $slug, Text $Text);
 
     abstract function delete($id, $slug);
 
@@ -37,45 +37,42 @@ abstract class User
 
 class FileStorage extends Storage
 {
-    public $data;
+    public $Text;
     public $slug;
 
-    function create(Text $data)
+    public function create(Text $Text)
     {
-        for ($i = 1; $i < 99; $i++) {
-            if (file_exists($data->slug)) {
-                $this->slug = $data->slug . "_$i";
-                
-            } else {
-                $this->data = $this->slug . $data->published;
-                file_put_contents($this->slug, serialize($this->data));
-                return $this->slug;
-            }
+
+        $i = 1;
+        while (file_exists($Text->slug)) {
+            $this->slug = $Text->slug . "_" . $i;
+            $i++;
         }
+        $this->Text = $this->slug . date_format(date_create(), 'd/m/Y H:i:s');
+        file_put_contents($this->slug, serialize($this->Text));
+        return $this->slug;
     }
 
-    function read($id, $slug)
+    public function read($id, $slug)
     {
         if (file_exists($slug)) {
             return unserialize(file_get_contents($slug));
         } else {
             return 'Файла не существует';
         }
-
     }
 
-    function update($id, $slug, Text $data)
+    public function update($id, $slug, Text $Text)
     {
         if (file_exists($slug)) {
-            file_put_contents($slug, serialize($data));
+            file_put_contents($slug, serialize($Text));
             return 'Файл изменён';
         } else {
             return 'Файла не существует';
         }
-        
     }
 
-    function delete($id, $slug)
+    public function delete($id, $slug)
     {
         if (file_exists($slug)) {
             unlink($slug);
@@ -85,21 +82,20 @@ class FileStorage extends Storage
         }
     }
 
-    function list()
+    public function list()
     {
-        $directories = array_diff(scandir('D:\desctor\Folders\Studing\Kurs\module-9'), ['..', '.', '.git']);
+        $directories = array_diff(scandir('./'), ['..', '.', '.git']);
         foreach ($directories as $file) {
             $list[] = unserialize(file_get_contents($file));
         }
         if ($list) {
             return $list;
-        } 
+        }
         return 'Ничего не найдено';
-
     }
 }
-$fileSafe = new FileStorage();
-$textMessage = new Text('Kaxa', 'text.txt', $fileSafe);
-$textMessage->editText('It is title', 'It is text');
-$textMessage->storeText();
-var_dump($textMessage->loadText());
+$fileStorage = new FileStorage();
+$Text = new Text('Kaxa', 'text.txt', $fileStorage);
+$Text->editText('It is title', 'It is text');
+var_dump($Text->loadText());
+$Text->storeText();
