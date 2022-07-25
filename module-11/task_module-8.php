@@ -38,7 +38,6 @@ class Text
         elseif ($string == 'text') {
             $this->text = $value;
             $this->storeText();
-            
         }
     }
 
@@ -73,12 +72,5 @@ class Text
     private function loadText()
     {
         var_dump($this->fileStorage->read('', $this->slug));
-    }
-
-    public function editText($title, $text)
-    {
-
-        $this->title = $title;
-        $this->text = $text;
     }
 }
