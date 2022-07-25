@@ -44,6 +44,7 @@ class Text
         } elseif ($string == 'text') {
             $this->text = $value;
             $this->storeText();
+            $this->loadText();
         }
     }
 
@@ -58,7 +59,6 @@ class Text
         } elseif ($string == 'title') {
             return $this->title;
         } elseif ($string == 'text') {
-            $this->loadText();
             return $this->text;
         }
     }
@@ -70,6 +70,6 @@ class Text
 
     private function loadText()
     {
-        var_dump($this->fileStorage->read('', $this->slug));
+        $this->fileStorage->read('', $this);
     }
 }

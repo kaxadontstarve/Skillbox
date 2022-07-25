@@ -6,7 +6,7 @@ abstract class Storage implements LoggerInterface, EventListenerInterface
 {
     abstract function create(Text $text);
 
-    abstract function read($id, $slug);
+    abstract function read($id, Text $text);
 
     abstract function update($id, $slug, Text $text);
 
@@ -69,21 +69,22 @@ class FileStorage extends Storage
     {
         $slug = $text->slug;
         $i = 1;
-        while (file_exists($slug.'.txt')) {
+        while (file_exists($slug . '.txt')) {
             $slug = $text->slug . "_" . $i;
             $i++;
         }
         $text->slug = $slug;
-        file_put_contents($slug . '.txt', serialize([$text]));
+        file_put_contents($text->slug . '.txt', serialize([$text]));
         return $slug;
     }
 
-    public function read($id, $slug)
+    public function read($id, $text)
     {
-        if (file_exists($slug)) {
-            return unserialize(file_get_contents($slug));
+        
+        if (!file_exists($text->slug . 'txt')) {
+            var_dump(unserialize(file_get_contents($text->slug . '.txt', 0)));
         } else {
-            return 'Файла не существует';
+            echo 'Файла не существует';
         }
     }
 
