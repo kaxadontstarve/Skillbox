@@ -4,11 +4,11 @@ require "./task_module-10.php";
 
 abstract class Storage implements LoggerInterface, EventListenerInterface
 {
-    abstract function create(Text $Text);
+    abstract function create(Text $text);
 
     abstract function read($id, $slug);
 
-    abstract function update($id, $slug, Text $Text);
+    abstract function update($id, $slug, Text $text);
 
     abstract function delete($id, $slug);
 
@@ -65,20 +65,17 @@ abstract class User implements EventListenerInterface
 
 class FileStorage extends Storage
 {
-    public $Text;
-    public $slug;
-
-    public function create(Text $Text)
+    public function create(Text $text)
     {
+        $slug = $text->slug;
         $i = 1;
-        while (file_exists($Text->storage['slug'])) {
-            $this->slug = $Text->storage['slug'] . "_" . $i;
+        while (file_exists($slug.'.txt')) {
+            $slug = $text->slug . "_" . $i;
             $i++;
         }
-        $Text->storage['slug'] = $this->slug;
-        var_dump($Text->storage['slug']);
-        //file_put_contents($this->slug, serialize($Text->storage));
-        return $this->slug;
+        $text->slug = $slug;
+        file_put_contents($slug . '.txt', serialize([$text]));
+        return $slug;
     }
 
     public function read($id, $slug)
@@ -90,10 +87,10 @@ class FileStorage extends Storage
         }
     }
 
-    public function update($id, $slug, Text $Text)
+    public function update($id, $slug, Text $text)
     {
         if (file_exists($slug)) {
-            file_put_contents($slug, serialize($Text));
+            file_put_contents($slug, serialize($text));
             return 'Файл изменён';
         } else {
             return 'Файла не существует';
@@ -123,6 +120,6 @@ class FileStorage extends Storage
     }
 }
 $fileStorage = new FileStorage();
-$Text = new Text('Kaxa', 'text.txt', $fileStorage);
-$Text->title = 'It is title';
-$Text->text = 'It is text';
+$text = new Text('Kaxa', 'text', $fileStorage);
+$text->title = 'It is title';
+$text->text = 'It is text';

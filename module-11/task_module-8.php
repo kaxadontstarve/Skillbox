@@ -7,19 +7,26 @@ class Text
     private $author;
     private $published;
     private $slug;
-    public $storage;
+
+    public function __construct($author, $slug, FileStorage $fileStorage)
+    {
+        $this->author = $author;
+        $this->slug = $slug;
+        $this->published = date("d-m-Y H:i:s");
+        $this->fileStorage = $fileStorage;
+    }
 
     public function __set($string, $value)
     {
         if ($string == 'author') {
-            if (count($value) > 120) {
+            if (mb_strlen($value) > 120) {
                 echo "Имя автора не должно привышать 120 символов";
                 return false;
             } else {
                 $this->author = $value;
             }
         } elseif ($string == 'slug') {
-            if (preg_match('/[a-zA-Z —_\/]/', $value) == 0) {
+            if (!preg_match('/[a-zA-Z —_\/]/', $value)) {
                 echo "Имя файла должно содержать символы латинского алфавита,—_/";
                 return false;
             } else {
@@ -32,10 +39,9 @@ class Text
             } else {
                 $this->published = $value;
             }
-        }elseif ($string == 'title') {
+        } elseif ($string == 'title') {
             $this->title = $value;
-        } 
-        elseif ($string == 'text') {
+        } elseif ($string == 'text') {
             $this->text = $value;
             $this->storeText();
         }
@@ -43,29 +49,22 @@ class Text
 
     public function __get($string)
     {
-        if ($string == 'slug') {
+        if ($string == 'author') {
+            return $this->author;
+        } elseif ($string == 'slug') {
             return $this->slug;
-        }
-        if ($string == 'text') {
+        } elseif ($string == 'published') {
+            return $this->published;
+        } elseif ($string == 'title') {
+            return $this->title;
+        } elseif ($string == 'text') {
             $this->loadText();
+            return $this->text;
         }
-    }
-
-    public function __construct($author, $slug, FileStorage $fileStorage)
-    {
-        $this->author = $author;
-        $this->slug = $slug;
-        $this->published = date("d-m-Y H:i:s");
-        $this->fileStorage = $fileStorage;
     }
 
     private function storeText()
     {
-        $this->storage['text'] = $this->text;
-        $this->storage['title'] = $this->title;
-        $this->storage['published'] = date("d-m-Y H:i:s");;
-        $this->storage['slug'] = $this->slug;
-        $this->storage['author'] = $this->author;
         $this->fileStorage->create($this);
     }
 
