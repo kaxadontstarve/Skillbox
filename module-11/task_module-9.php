@@ -1,14 +1,14 @@
 <?php
 require "./task_module-8.php";
-require "./task.php";
+require "./task_module-10.php";
 
 abstract class Storage implements LoggerInterface, EventListenerInterface
 {
-    abstract function create(Text $Text);
+    abstract function create(Text $text);
 
-    abstract function read($id, $slug);
+    abstract function read($id, Text $text);
 
-    abstract function update($id, $slug, Text $Text);
+    abstract function update($id, $slug, Text $text);
 
     abstract function delete($id, $slug);
 
@@ -47,13 +47,13 @@ abstract class View
 
 abstract class User implements EventListenerInterface
 {
-    public $id;
-    public $name;
-    public $role;
+    protected $id;
+    protected $name;
+    protected $role;
 
-    abstract function getTextsToEdit($role);
+    protected abstract function getTextsToEdit($role);
 
-    public function attachEvent($methodName, $callback)
+    function attachEvent($methodName, $callback)
     {
         set_error_handler([$methodName, $callback]);
     }
@@ -63,37 +63,35 @@ abstract class User implements EventListenerInterface
     }
 }
 
-
 class FileStorage extends Storage
 {
-    public $Text;
-    public $slug;
-
-    public function create(Text $Text)
+    public function create(Text $text)
     {
+        $slug = $text->slug;
         $i = 1;
-        while (file_exists($Text->slug)) {
-            $this->slug = $Text->slug . "_" . $i;
+        while (file_exists($slug . '.txt')) {
+            $slug = $text->slug . "_" . $i;
             $i++;
         }
-        $this->Text = $this->slug . date_format(date_create(), 'd/m/Y H:i:s');
-        file_put_contents($this->slug, serialize($this->Text));
-        return $this->slug;
+        $text->slug = $slug;
+        file_put_contents($text->slug . '.txt', serialize([$text]));
+        return $slug;
     }
 
-    public function read($id, $slug)
+    public function read($id, $text)
     {
-        if (file_exists($slug)) {
-            return unserialize(file_get_contents($slug));
+        
+        if (!file_exists($text->slug . 'txt')) {
+            var_dump(unserialize(file_get_contents($text->slug . '.txt', 0)));
         } else {
-            return 'Файла не существует';
+            echo 'Файла не существует';
         }
     }
 
-    public function update($id, $slug, Text $Text)
+    public function update($id, $slug, Text $text)
     {
         if (file_exists($slug)) {
-            file_put_contents($slug, serialize($Text));
+            file_put_contents($slug, serialize($text));
             return 'Файл изменён';
         } else {
             return 'Файла не существует';
@@ -123,7 +121,6 @@ class FileStorage extends Storage
     }
 }
 $fileStorage = new FileStorage();
-$Text = new Text('Kaxa', 'text.txt', $fileStorage);
-$Text->editText('It is title', 'It is text');
-$Text->storeText();
-var_dump($Text->loadText());
+$text = new Text('Kaxa', 'text', $fileStorage);
+$text->title = 'It is title';
+$text->text = 'It is text';

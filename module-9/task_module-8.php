@@ -23,7 +23,7 @@ class Text
     {
         $storage['text'] = $this->text;
         $storage['title'] = $this->title;
-        $storage['published'] = $this->published;
+        $storage['published'] = date("Y-m-d H:i:s");
         $storage['slug'] = $this->slug;
         $storage['author'] = $this->author;
 
