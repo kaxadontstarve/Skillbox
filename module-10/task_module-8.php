@@ -1,7 +1,7 @@
 <?php
 class Text
 {
-    public $data;
+    public $fileStorage;
     public $text;
     public $title;
     public $author;
@@ -9,12 +9,12 @@ class Text
     public $slug;
     public $storage;
 
-    public function __construct($author, $slug, FileStorage $data)
+    public function __construct($author, $slug, FileStorage $fileStorage)
     {
         $this->author = $author;
         $this->slug = $slug;
         $this->published = date("Y-m-d H:i:s");
-        $this->data = $data;
+        $this->data = $fileStorage;
     }
 
     public function storeText()
@@ -30,7 +30,7 @@ class Text
 
     public function loadText()
     {
-        return $this->data->read('', $this->slug);
+        return $this->fileStorage->read('', $this->slug);
     }
 
     public function editText($title, $text)
